@@ -34,7 +34,7 @@ function renderToy(element) {
   toyCollection.append(toy);
   toy.append(toyName, toyImg, toyLikes, button);
 
-  buttonEventListener(button, element.id, element.likes)
+  buttonEventListener(button, element.id, element.likes, toyLikes)
 }
 
 function renderToys(data) {
@@ -43,11 +43,12 @@ function renderToys(data) {
   }
 }
 
-function buttonEventListener(button, id, likes) {
+function buttonEventListener(button, id, likes, toyLikes) {
     button.addEventListener("click", (e) => {
     e.preventDefault();
-    const moreLikes = Number(e.target.value) + 1;
 
+    likes = Number(likes) + 1;
+      
     fetch(`http://localhost:3000/toys/${id}`, {
         method: "PATCH",
         headers: {
@@ -55,17 +56,14 @@ function buttonEventListener(button, id, likes) {
           "Accept": "application/json"
         },
         body: JSON.stringify({
-          "likes": moreLikes
+          "likes": likes
         })
       })
     .then(response => response.json())
-    console.log(moreLikes)
-    // .then(function (data) {
-    //   (likes) = `${moreLikes} likes`;})
-    //   console.log(moreLikes)
-  })
+    .then(function () {
+      (toyLikes.textContent) = `${likes} likes`;})
+    })
 }
-
 
 const toyForm = document.querySelector(".add-toy-form");
 
